@@ -18,4 +18,8 @@ public class Log {
     public String toString() {
         return "Override purposes";
     }
+
+    public int getTimestamp() {
+        return timestamp;
+    }
 }

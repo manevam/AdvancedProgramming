@@ -11,8 +11,8 @@ public class InfoLog extends Log{
 
     @Override
     public String toString() {
-        return String.format("Type: %s, Message: %s, Timestamp: %d, Severity: %d",
-                type.name(), message, timestamp,severity);
+        return String.format("[%s] %s %d T:%d",
+                type.name(), message, timestamp, timestamp);
     }
 
 }

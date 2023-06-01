@@ -100,6 +100,105 @@ public class LogCollector {
     }
 
     public void displayLogs(String service, String microservice, String order){
+        String serviceName = String.valueOf(allLogs.entrySet().stream().filter(e -> e.getKey().equals(service)).findAny().orElse(null));
+        StringBuilder sb = new StringBuilder();
+        if(microservice != null)
+            sb.append(String.format("displayLogs %s %s %s\n", service, microservice,order));
+        else
+            sb.append(String.format("displayLogs %s %s\n", service, order));
+
+        if(order.equals("NEWEST_FIRST")) {
+            allLogs.computeIfPresent(service, (key, value) -> {
+                Microservice m1 = value.stream().filter(m -> m.microserviceName.equals(microservice)).findFirst().orElse(null);
+                if (m1 != null) {
+                    m1.logs.stream().sorted(Comparator.comparing(Log::getTimestamp).reversed()).forEach(l -> {
+                        sb.append(String.format("%s|%s ", service, m1.microserviceName));
+                        sb.append(l.toString() + "\n");
+                    });
+                } else {
+                    value.stream().forEach(mic -> {
+                        mic.logs.stream().forEach(log -> {
+                            mic.logs.stream().sorted(Comparator.comparing(Log::getTimestamp).reversed()).forEach(l -> {
+                                sb.append(String.format("%s|%s ", service, mic.microserviceName));
+                                sb.append(l.toString() + "\n");
+                            });
+                        });
+                    });
+                }
+                return value;
+            });
+            System.out.println(sb.toString());
+        }
+         else if(order.equals("OLDEST_FIRST")) {
+
+            allLogs.computeIfPresent(service, (key, value) -> {
+                Microservice m1 = value.stream().filter(m -> m.microserviceName.equals(microservice)).findFirst().orElse(null);
+                if (m1 != null) {
+                    m1.logs.stream().sorted(Comparator.comparing(Log::getTimestamp)).forEach(l -> {
+                        sb.append(String.format("%s|%s ", service, m1.microserviceName));
+                        sb.append(l.toString() + "\n");
+                    });
+                } else {
+                    value.stream().forEach(mic -> {
+                        mic.logs.stream().forEach(log -> {
+                            mic.logs.stream().sorted(Comparator.comparing(Log::getTimestamp)).forEach(l -> {
+                                sb.append(String.format("%s|%s ", service, mic.microserviceName));
+                                sb.append(l.toString() + "\n");
+                            });
+                        });
+                    });
+                }
+                return value;
+            });
+            System.out.println(sb.toString());
+        }
+
+        else if(order.equals("MOST_SEVERE_FIRST")) {
+
+            allLogs.computeIfPresent(service, (key, value) -> {
+                Microservice m1 = value.stream().filter(m -> m.microserviceName.equals(microservice)).findFirst().orElse(null);
+                if (m1 != null) {
+                    m1.logs.stream().sorted(Comparator.comparing(Log::getSeverity).reversed()).forEach(l -> {
+                        sb.append(String.format("%s|%s ", service, m1.microserviceName));
+                        sb.append(l.toString() + "\n");
+                    });
+                } else {
+                    value.stream().forEach(mic -> {
+                        mic.logs.stream().forEach(log -> {
+                            mic.logs.stream().sorted(Comparator.comparing(Log::getSeverity).reversed()).forEach(l -> {
+                                sb.append(String.format("%s|%s ", service, mic.microserviceName));
+                                sb.append(l.toString() + "\n");
+                            });
+                        });
+                    });
+                }
+                return value;
+            });
+            System.out.println(sb.toString());
+        }
+        else if(order.equals("LEAST_SEVERE_FIRST")) {
+
+            allLogs.computeIfPresent(service, (key, value) -> {
+                Microservice m1 = value.stream().filter(m -> m.microserviceName.equals(microservice)).findFirst().orElse(null);
+                if (m1 != null) {
+                    m1.logs.stream().sorted(Comparator.comparing(Log::getSeverity)).forEach(l -> {
+                        sb.append(String.format("%s|%s ", service, m1.microserviceName));
+                        sb.append(l.toString() + "\n");
+                    });
+                } else {
+                    value.stream().forEach(mic -> {
+                        mic.logs.stream().forEach(log -> {
+                            mic.logs.stream().sorted(Comparator.comparing(Log::getSeverity)).forEach(l -> {
+                                sb.append(String.format("%s|%s ", service, mic.microserviceName));
+                                sb.append(l.toString() + "\n");
+                            });
+                        });
+                    });
+                }
+                return value;
+            });
+            System.out.println(sb.toString());
+        }
 
     }
 }
